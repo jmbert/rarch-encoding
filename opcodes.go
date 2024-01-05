@@ -57,7 +57,8 @@ const (
  */
 
 const (
-	PREF_ABSOLUTE = 0x00
-	PREF_PCREL    = 0x01
-	PREF_INDREL   = 0x02
+	PREF_LITERAL  = 0x00
+	PREF_ABSOLUTE = 0x10
+	PREF_PCREL    = 0x11
+	PREF_INDREL   = 0x12
 )
