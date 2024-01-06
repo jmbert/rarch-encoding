@@ -42,13 +42,13 @@ func (i *Immediate) Encode() []byte {
 	bytes := buf.Bytes()
 	switch i.Length {
 	case ImmediateLen8:
-		return bytes[0:1]
+		return bytes[len(bytes)-1:]
 	case ImmediateLen16:
-		return bytes[0:2]
+		return bytes[len(bytes)-2:]
 	case ImmediateLen32:
-		return bytes[0:4]
+		return bytes[len(bytes)-4:]
 	case ImmediateLen64:
-		return bytes[0:8]
+		return bytes
 
 	default:
 		return nil
