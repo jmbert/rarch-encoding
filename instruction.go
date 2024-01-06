@@ -73,7 +73,11 @@ func DecodeInstruction(instr []byte) (Instruction, uint64) {
 		buf := new(bytes.Buffer)
 		buf.Write(instr[3:])
 		var immval uint64
-		switch DecodeRegister(instr[2]).Register_size {
+		immsize := DecodeRegister(instr[2]).Register_size
+		if (opcode == OP_LD || opcode == OP_STR) && prefix != PREF_LITERAL {
+			immsize = ImmediateLen64
+		}
+		switch immsize {
 		case RegisterLen8:
 			if len(instr) < 4 {
 				return nil, 0
@@ -115,7 +119,7 @@ func DecodeInstruction(instr []byte) (Instruction, uint64) {
 			}
 			immval = uint64(immvall)
 		}
-		imm := Immediate{Value: uint64(immval), Length: ((instr[2] >> 4) & 0x3)}
+		imm := Immediate{Value: uint64(immval), Length: immsize}
 		return FormatC{Prefix: prefix, Opcode: opcode, Register: instr[2], Immediate: imm}, 3 + (1 << imm.Length)
 	case FormatD_Enum:
 		return FormatD{Prefix: prefix, Opcode: opcode, Destination_register: instr[2], Source_register: instr[2]}, 4
